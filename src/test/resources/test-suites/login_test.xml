@@ -1,0 +1,19 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Login Test Suite" parallel="tests" thread-count="2">
+    <test name="Login Test on Android 1">
+        <parameter name="deviceName" value="Samsung Galaxy S21"/>
+        <parameter name="platformName" value="Android"/>
+        <parameter name="platformVersion" value="11.0"/>
+        <classes>
+            <class name="com.lando.tests.LoginTest"/>
+        </classes>
+    </test>
+    <test name="Login Test on Android 2">
+        <parameter name="deviceName" value="Samsung Galaxy S24 Ultra"/>
+        <parameter name="platformName" value="Android"/>
+        <parameter name="platformVersion" value="14.0"/>
+        <classes>
+            <class name="com.lando.tests.LoginTest"/>
+        </classes>
+    </test>
+</suite>
