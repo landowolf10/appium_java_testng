@@ -21,7 +21,6 @@ test {
         testLogging.showStandardStreams = true
         useDefaultListeners = true
         //parallel = true
-        systemProperty("browserstack.enabled", true)
         if (project.hasProperty('login_test')) { suites './src/test/resources/test-suites/login_test.xml' }
         //if (project.hasProperty('suite2')) { suites './src/test/suite2.xml' }
     }

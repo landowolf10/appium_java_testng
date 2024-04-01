@@ -10,7 +10,6 @@ import java.util.HashMap;
 
 public class SetUp {
     AppiumDriver driver;
-    public static WebDriverWait wait;
     private static boolean driverInstanceExists = false;
     private static AppiumDriver driverInstance = null;
 
@@ -32,8 +31,11 @@ public class SetUp {
     private AppiumDriver createRemoteDriver(String deviceName, String platformName, String platformVersion) {
         DesiredCapabilities capabilities = new DesiredCapabilities();
         HashMap<String, Object> browserstackOptions = new HashMap<>();
-        String userName = "orlandoavila_SaKnUC";
-        String accessKey = "wpUp3j8EbKrHdvrweUxk";
+        String userName = System.getenv("browserstack_username");
+        String accessKey = System.getenv("browserstack_access_key");
+
+        System.out.println("Username: " + userName);
+        System.out.println("Access key: " + accessKey);
 
         browserstackOptions.put("appiumVersion", "2.0.1");
         browserstackOptions.put("gpsLocation", "41.8755616,-87.6244212");

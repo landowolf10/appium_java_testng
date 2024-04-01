@@ -89,13 +89,4 @@ public class BasePage {
     public boolean elementIsEnabled(By locatorType, int maxWaitSec) {
         return getElementBy(locatorType, maxWaitSec).isEnabled();
     }
-
-    /*public void quitDriver() {
-        if (driver != null) {
-            driver.quit();
-            SetUp.killDriver();
-            driver = null;
-        }
-    }*/
-
 }

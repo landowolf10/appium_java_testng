@@ -15,7 +15,9 @@ on:
 
 jobs:
   build:
-
+    env:
+      browserstack_username: 'orlandoavila_SaKnUC'
+      browserstack_access_key: 'wpUp3j8EbKrHdvrweUxk'
     runs-on: ubuntu-latest
     permissions:
       contents: read

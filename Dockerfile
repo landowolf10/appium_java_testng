@@ -25,7 +25,7 @@ RUN chmod +x gradlew
 #RUN chmod +x /usr/src/app/src/test/resources/drivers/geckodriver
 
 # Define a default value for the test runner
-ARG TEST_RUNNER="LoginRunner"
+ARG TEST_SUITE="login_test"
 
 # Run the test runner with gradlew
-CMD ["sh", "-c", "./gradlew clean test \"$TEST_RUNNER\""]
+CMD ["sh", "-c", "./gradlew clean test -P\"$TEST_SUITE\""]
