@@ -32,7 +32,9 @@ jobs:
 
     # Ensure executable permission for Gradle wrapper script
     - name: Grant execute permission to Gradle wrapper
-      run: chmod +x ./gradlew
+      run: |
+        chmod +x ./gradlew
+        echo ${{ secrets.BROWSERSTACK_USERNAME }}
 
     # Configure Gradle for optimal use in GiHub Actions, including caching of downloaded dependencies.
     # See: https://github.com/gradle/actions/blob/main/setup-gradle/README.md
