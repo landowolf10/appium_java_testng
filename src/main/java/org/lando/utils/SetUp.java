@@ -34,6 +34,9 @@ public class SetUp {
         String userName = System.getenv("browserstack_username");
         String accessKey = System.getenv("browserstack_access_key");
 
+        System.out.println("Username: " + userName);
+        System.out.println("Access key: " + accessKey);
+
         browserstackOptions.put("appiumVersion", "2.0.1");
         browserstackOptions.put("gpsLocation", "41.8755616,-87.6244212");
 
