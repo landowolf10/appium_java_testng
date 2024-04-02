@@ -16,8 +16,8 @@ on:
 jobs:
   build:
     env:
-      browserstack_username: ${{secrets.BROWSERSTACK_ACCESS_KEY}}
-      browserstack_access_key: ${{secrets.BROWSERSTACK_USERNAME}}
+      browserstack_username: ${{secrets.BROWSERSTACK_USERNAME}}
+      browserstack_access_key: ${{secrets.BROWSERSTACK_ACCESS_KEY}}
     runs-on: ubuntu-latest
     permissions:
       contents: read
