@@ -33,11 +33,11 @@ jobs:
           echo "${{ secrets.BROWSERSTACK_ANDROID_APP }}"
 
       - name: Build with Gradle Wrapper (BrowserStack)
-        run: |
-          ./gradlew clean test -Plogin_test \
-          -Dbrowserstack_username=${{ secrets.BROWSERSTACK_USERNAME }} \
-          -Dbrowserstack_access_key=${{ secrets.BROWSERSTACK_ACCESS_KEY }} \
-          -Dbrowserstack_android_app=${{ secrets.BROWSERSTACK_ANDROID_APP }}
+        env:
+          BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
+          BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+          BROWSERSTACK_ANDROID_APP: ${{ secrets.BROWSERSTACK_ANDROID_APP }}
+        run: ./gradlew clean test -Plogin_test
 
   dependency-submission:
     runs-on: ubuntu-latest
