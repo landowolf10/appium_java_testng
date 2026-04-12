@@ -28,11 +28,14 @@ public class BasePage {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(elementLocator));
     }
 
-    public List<WebElement> getAllElementsBy(By elementLocator)
-    {
-        return driver.findElements(elementLocator);
+    public List<WebElement> getAllElementsBy(By elementLocator, int maxWaitSec) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(maxWaitSec));
+        try {
+            return wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(elementLocator));
+        } catch (TimeoutException e) {
+            return List.of();
+        }
     }
-
     public void writeText(By elementLocator, String text, int maxWaitSec) {
         getElementBy(elementLocator, maxWaitSec).clear();
         getElementBy(elementLocator, maxWaitSec).sendKeys(text);

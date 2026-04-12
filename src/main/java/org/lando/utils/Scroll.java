@@ -1,6 +1,7 @@
 package org.lando.utils;
 
 import io.appium.java_client.AppiumDriver;
+import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.interactions.PointerInput;
@@ -13,6 +14,13 @@ import java.util.List;
 public class Scroll extends BasePage{
     public Scroll(AppiumDriver driver) {
         super(driver);
+    }
+
+    public void scrollUntilVisible(By elementLocator, String direction, int maxAttempts) {
+        for (int i = 0; i < maxAttempts; i++) {
+            if (elementExists(elementLocator, 2)) return;
+            scroll(direction);
+        }
     }
 
     public void scroll(String direction)

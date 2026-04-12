@@ -1,6 +1,8 @@
 package org.lando.utils;
 
 import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.android.options.UiAutomator2Options;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.net.MalformedURLException;
@@ -13,53 +15,44 @@ public class SetUp {
     private static AppiumDriver driverInstance = null;
 
     public AppiumDriver getDriver(String deviceName, String platformName, String platformVersion, boolean isRemote) {
-        if (driverInstanceExists)
-            driver = driverInstance;
+        if (isRemote)
+            driver = createRemoteDriver(deviceName, platformName, platformVersion);
         else
-            if (isRemote)
-                driver = createRemoteDriver(deviceName, platformName, platformVersion);
-            else
-                driver = createLocalDriver(deviceName, platformName, platformVersion);
-
-        driverInstanceExists = true;
-        driverInstance = driver;
+            driver = createLocalDriver(platformName);
 
         return driver;
     }
 
     private AppiumDriver createRemoteDriver(String deviceName, String platformName, String platformVersion) {
-        DesiredCapabilities capabilities = new DesiredCapabilities();
-        HashMap<String, Object> browserstackOptions = new HashMap<>();
         String userName = System.getenv("browserstack_username");
         String accessKey = System.getenv("browserstack_access_key");
+        String app = System.getenv("browserstack_android_app");
 
+        HashMap<String, Object> browserstackOptions = new HashMap<>();
         browserstackOptions.put("appiumVersion", "2.0.1");
         browserstackOptions.put("gpsLocation", "41.8755616,-87.6244212");
+        browserstackOptions.put("buildName", "Testing Android app");
+        browserstackOptions.put("projectName", "Successful login");
+        browserstackOptions.put("deviceName", deviceName);
+        browserstackOptions.put("platformVersion", platformVersion);
+
+        DesiredCapabilities capabilities = new DesiredCapabilities();
+        capabilities.setCapability("bstack:options", browserstackOptions);
+        capabilities.setCapability("platformName", platformName);
 
         if (platformName.equals("Android")) {
-            capabilities.setCapability("bstack:options", browserstackOptions);
-            capabilities.setCapability("buildName", "Testing Android app");
-            capabilities.setCapability("projectName", "Successful login");
-            capabilities.setCapability("deviceName", deviceName);
-            capabilities.setCapability("platformName", platformName);
-            capabilities.setCapability("platformVersion", platformVersion);
-            capabilities.setCapability("app", ConstantData.androidApp);
-            capabilities.setCapability("autoGrantPermissions", "true");
-        }
-        else if (platformName.equals("iOS")) {
-            capabilities.setCapability("bstack:options", browserstackOptions);
-            capabilities.setCapability("buildName", "Testing iOS app");
-            capabilities.setCapability("projectName", "Successful login");
-            capabilities.setCapability("deviceName", deviceName);
-            capabilities.setCapability("platformName", platformName);
-            capabilities.setCapability("platformVersion", platformVersion);
-            capabilities.setCapability("app", ConstantData.iosApp);
-            capabilities.setCapability("autoGrantPermissions", "true");
+            capabilities.setCapability("appium:app", app);
+            capabilities.setCapability("appium:autoGrantPermissions", true);
+        } else if (platformName.equals("iOS")) {
+            capabilities.setCapability("appium:app", ConstantData.iosApp);
+            capabilities.setCapability("appium:autoGrantPermissions", true);
         }
 
         try {
-            driver = new AppiumDriver(new URL(String.format("https://%s:%s@hub.browserstack.com/wd/hub", userName,
-                    accessKey)), capabilities   );
+            driver = new AppiumDriver(
+                    new URL(String.format("https://%s:%s@hub.browserstack.com/wd/hub", userName, accessKey)),
+                    capabilities
+            );
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -67,29 +60,22 @@ public class SetUp {
         return driver;
     }
 
-    private AppiumDriver createLocalDriver(String deviceName, String platformName, String platformVersion) {
-        DesiredCapabilities capabilities = new DesiredCapabilities();
-
-        if (platformName.equals("Android")) {
-            capabilities.setCapability("automationName", ConstantData.automationName);
-            capabilities.setCapability("platformName", ConstantData.platformName);
-            capabilities.setCapability("deviceName", ConstantData.deviceName);
-            capabilities.setCapability("appPackage", ConstantData.appPackage);
-            capabilities.setCapability("appActivity", ConstantData.appActivity);
-            capabilities.setCapability("autoGrantPermissions", true);
-        }
-        else if (platformName.equals("iOS")) {
-            capabilities.setCapability("buildName", "Testing iOS app");
-            capabilities.setCapability("projectName", "Successful login");
-            capabilities.setCapability("deviceName", deviceName);
-            capabilities.setCapability("platformName", platformName);
-            capabilities.setCapability("platformVersion", platformVersion);
-            capabilities.setCapability("app", ConstantData.iosApp);
-            capabilities.setCapability("autoGrantPermissions", "true");
-        }
-
+    private AppiumDriver createLocalDriver(String platformName) {
         try {
-            driver = new AppiumDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
+            if (platformName.equals("Android")) {
+                UiAutomator2Options options = new UiAutomator2Options();
+                options.setDeviceName(ConstantData.deviceName);
+                options.setAppPackage(ConstantData.appPackage);
+                options.setAppActivity(ConstantData.appActivity);
+                options.setAutoGrantPermissions(true);
+                options.setCapability("appium:settings[waitForIdleTimeout]", 0);
+                options.setCapability("appium:uiautomator2ServerLaunchTimeout", 60000);
+
+                driver = new AndroidDriver(new URL("http://127.0.0.1:4723"), options);
+            }
+            else if (platformName.equals("iOS")) {
+                // iOS config
+            }
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }

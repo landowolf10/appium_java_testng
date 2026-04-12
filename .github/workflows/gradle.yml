@@ -18,6 +18,7 @@ jobs:
     env:
       browserstack_username: ${{secrets.BROWSERSTACK_USERNAME}}
       browserstack_access_key: ${{secrets.BROWSERSTACK_ACCESS_KEY}}
+      browserstack_android_app: ${{secrets.BROWSERSTACK_ANDROID_APP}}
     runs-on: ubuntu-latest
     permissions:
       contents: read

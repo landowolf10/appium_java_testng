@@ -1,37 +1,35 @@
 package com.lando.tests;
 
 import io.appium.java_client.AppiumDriver;
-import org.lando.pages.LoginPage;
+import org.lando.pages.*;
 import org.lando.utils.SetUp;
-import org.testng.Assert;
 import org.testng.annotations.*;
 
-public class LoginTest {
+public class BaseTest {
     AppiumDriver driver;
     LoginPage loginPage;
+    ProductPage productPage;
+    CartPage cartPage;
+    CheckoutPage checkoutPage;
+    OverviewPage overviewPage;
+    CompletePage completePage;
+
 
     @BeforeTest
     @Parameters({"deviceName", "platformName", "platformVersion"})
     public void setUp(String deviceName, String platformName, String platformVersion) {
         SetUp setUp = new SetUp();
         driver = setUp.getDriver(deviceName, platformName, platformVersion, true);
-        //this.testData = JsonLoader.getTestData(testDataPath, FlightTestData.class);
 
         loginPage = new LoginPage(driver);
-
-        Assert.assertTrue(loginPage.homeButtonDisplayed());
+        productPage = new ProductPage(driver);
+        cartPage = new CartPage(driver);
+        checkoutPage = new CheckoutPage(driver);
+        overviewPage = new OverviewPage(driver);
+        completePage = new CompletePage(driver);
     }
 
-    @Test
-    public void successfulLoginTest() {
-        loginPage.pressLoginOption();
-        loginPage.writeCredentials("lando.wolg@gmail.com", "lando1234");
-        loginPage.pressLoginButton();
-
-        Assert.assertEquals(loginPage.getLoginModalText(), "You are logged in!");
-    }
-
-    @AfterSuite
+    @AfterTest
     public void tearDown() {
         SetUp.quitDriver();
     }
