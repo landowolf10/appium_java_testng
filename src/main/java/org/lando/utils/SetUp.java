@@ -30,6 +30,10 @@ public class SetUp {
 
         System.out.println("ANDROID APP = " + androidApp);
 
+        if (!androidApp.startsWith("bs://")) {
+            throw new RuntimeException("Invalid app id: " + androidApp);
+        }
+
         HashMap<String, Object> browserstackOptions = new HashMap<>();
         browserstackOptions.put("appiumVersion", "2.0.1");
         browserstackOptions.put("gpsLocation", "41.8755616,-87.6244212");
