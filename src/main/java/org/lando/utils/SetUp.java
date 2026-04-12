@@ -28,11 +28,7 @@ public class SetUp {
         String accessKey = System.getenv("BROWSERSTACK_ACCESS_KEY");
         String androidApp = System.getenv("BROWSERSTACK_ANDROID_APP");
 
-        System.out.println("ANDROID APP = " + androidApp);
-
-        if (androidApp == null || !androidApp.startsWith("bs://")) {
-            throw new RuntimeException("Invalid app id: " + androidApp);
-        }
+        System.out.println("ANDROID APP LENGTH = " + androidApp.length());
 
         DesiredCapabilities capabilities = new DesiredCapabilities();
 
