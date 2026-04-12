@@ -34,6 +34,11 @@ jobs:
           -Dbrowserstack_access_key=${{ secrets.BROWSERSTACK_ACCESS_KEY }} \
           -Dbrowserstack_android_app=${{ secrets.BROWSERSTACK_ANDROID_APP }}
 
+      - name: Debug BrowserStack App
+        run: |
+          echo "APP VALUE:"
+          echo "${{ secrets.BROWSERSTACK_ANDROID_APP }}"
+
   dependency-submission:
     runs-on: ubuntu-latest
     permissions:
