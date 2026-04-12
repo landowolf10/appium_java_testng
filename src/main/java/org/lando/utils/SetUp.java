@@ -41,7 +41,7 @@ public class SetUp {
         capabilities.setCapability("platformName", platformName);
 
         if (platformName.equals("Android")) {
-            capabilities.setCapability("appium:app", app);
+            capabilities.setCapability("appium:app", ConstantData.androidApp);
             capabilities.setCapability("appium:autoGrantPermissions", true);
         } else if (platformName.equals("iOS")) {
             capabilities.setCapability("appium:app", ConstantData.iosApp);
