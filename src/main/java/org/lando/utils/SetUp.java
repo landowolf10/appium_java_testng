@@ -26,7 +26,7 @@ public class SetUp {
     private AppiumDriver createRemoteDriver(String deviceName, String platformName, String platformVersion) {
         String userName = System.getenv("browserstack_username");
         String accessKey = System.getenv("browserstack_access_key");
-        String app = System.getenv("browserstack_android_app");
+        String androidApp = System.getenv("browserstack_android_app");
 
         HashMap<String, Object> browserstackOptions = new HashMap<>();
         browserstackOptions.put("appiumVersion", "2.0.1");
@@ -41,7 +41,7 @@ public class SetUp {
         capabilities.setCapability("platformName", platformName);
 
         if (platformName.equals("Android")) {
-            capabilities.setCapability("appium:app", ConstantData.androidApp);
+            capabilities.setCapability("appium:app", androidApp);
             capabilities.setCapability("appium:autoGrantPermissions", true);
         } else if (platformName.equals("iOS")) {
             capabilities.setCapability("appium:app", ConstantData.iosApp);
