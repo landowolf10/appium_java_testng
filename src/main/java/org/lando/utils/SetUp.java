@@ -24,9 +24,9 @@ public class SetUp {
     }
 
     private AppiumDriver createRemoteDriver(String deviceName, String platformName, String platformVersion) {
-        String userName = System.getenv("browserstack_username");
-        String accessKey = System.getenv("browserstack_access_key");
-        String androidApp = System.getenv("browserstack_android_app");
+        String userName = System.getProperty("browserstack_username");
+        String accessKey = System.getProperty("browserstack_access_key");
+        String androidApp = System.getProperty("browserstack_android_app");
 
         HashMap<String, Object> browserstackOptions = new HashMap<>();
         browserstackOptions.put("appiumVersion", "2.0.1");
