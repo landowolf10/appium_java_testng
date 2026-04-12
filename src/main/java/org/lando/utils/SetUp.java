@@ -30,33 +30,32 @@ public class SetUp {
 
         System.out.println("ANDROID APP = " + androidApp);
 
-        if (!androidApp.startsWith("bs://")) {
+        if (androidApp == null || !androidApp.startsWith("bs://")) {
             throw new RuntimeException("Invalid app id: " + androidApp);
         }
 
+        DesiredCapabilities capabilities = new DesiredCapabilities();
+
+        capabilities.setCapability("platformName", platformName);
+        capabilities.setCapability("appium:deviceName", deviceName);
+        capabilities.setCapability("appium:platformVersion", platformVersion);
+        capabilities.setCapability("appium:app", androidApp);
+        capabilities.setCapability("appium:autoGrantPermissions", true);
+
         HashMap<String, Object> browserstackOptions = new HashMap<>();
         browserstackOptions.put("appiumVersion", "2.0.1");
-        browserstackOptions.put("gpsLocation", "41.8755616,-87.6244212");
         browserstackOptions.put("buildName", "Testing Android app");
         browserstackOptions.put("projectName", "Successful login");
-        browserstackOptions.put("deviceName", deviceName);
-        browserstackOptions.put("platformVersion", platformVersion);
 
-        DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability("bstack:options", browserstackOptions);
-        capabilities.setCapability("platformName", platformName);
-
-        if (platformName.equals("Android")) {
-            capabilities.setCapability("appium:app", androidApp);
-            capabilities.setCapability("appium:autoGrantPermissions", true);
-        } else if (platformName.equals("iOS")) {
-            capabilities.setCapability("appium:app", ConstantData.iosApp);
-            capabilities.setCapability("appium:autoGrantPermissions", true);
-        }
 
         try {
             driver = new AppiumDriver(
-                    new URL(String.format("https://%s:%s@hub.browserstack.com/wd/hub", userName, accessKey)),
+                    new URL(String.format(
+                            "https://%s:%s@hub.browserstack.com/wd/hub",
+                            userName,
+                            accessKey
+                    )),
                     capabilities
             );
         } catch (MalformedURLException e) {
