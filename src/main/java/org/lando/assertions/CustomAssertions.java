@@ -7,6 +7,7 @@ import org.lando.locators.OverviewLocators;
 import org.lando.locators.ProductLocators;
 import org.lando.utils.BasePage;
 import org.lando.utils.Scroll;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
@@ -41,15 +42,15 @@ public class CustomAssertions extends BasePage {
     }
 
     public void assertOverviewTotals() {
-        elementIsDisplayed(
-                AppiumBy.accessibilityId(OverviewLocators.overviewContainer),
-                10
-        );
+        By overviewContainer = AppiumBy.accessibilityId(OverviewLocators.overviewContainer);
 
-        driver.findElement(AppiumBy.androidUIAutomator(
-                "new UiScrollable(new UiSelector().scrollable(true))" +
-                        ".scrollIntoView(new UiSelector().textContains(\"Total\"))"
-        ));
+        elementIsDisplayed(overviewContainer, 10);
+
+        scroll.scrollUntilVisible(
+                AppiumBy.androidUIAutomator("new UiSelector().textContains(\"Total\")"),
+                "up",
+                5
+        );
 
         List<WebElement> prices =
                 driver.findElements(AppiumBy.className("android.widget.TextView"));

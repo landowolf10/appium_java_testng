@@ -4,6 +4,8 @@ import io.appium.java_client.AppiumDriver;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Point;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Pause;
 import org.openqa.selenium.interactions.PointerInput;
 import org.openqa.selenium.interactions.Sequence;
 
@@ -30,34 +32,58 @@ public class Scroll extends BasePage{
     }
 
     public void scroll(String direction) {
-        Dimension dim = driver.manage().window().getSize();
+        scroll(direction, null);
+    }
 
-        int width = dim.getWidth();
-        int height = dim.getHeight();
+    public void scroll(String direction, By containerLocator) {
 
-        int x = width / 2;
+        int startX, startY, endY;
 
-        int startY;
-        int endY;
+        if (containerLocator != null) {
+            WebElement container = driver.findElement(containerLocator);
 
-        if (direction.equalsIgnoreCase("up")) {
-            startY = (int) (height * 0.7);
-            endY = (int) (height * 0.3);
+            Point location = container.getLocation();
+            Dimension size = container.getSize();
+
+            startX = location.getX() + size.getWidth() / 2;
+
+            if (direction.equalsIgnoreCase("up")) {
+                startY = location.getY() + (int)(size.getHeight() * 0.8);
+                endY   = location.getY() + (int)(size.getHeight() * 0.2);
+            } else {
+                startY = location.getY() + (int)(size.getHeight() * 0.2);
+                endY   = location.getY() + (int)(size.getHeight() * 0.8);
+            }
+
         } else {
-            startY = (int) (height * 0.3);
-            endY = (int) (height * 0.7);
+            Dimension dim = driver.manage().window().getSize();
+
+            int width = dim.getWidth();
+            int height = dim.getHeight();
+
+            startX = width / 2;
+
+            if (direction.equalsIgnoreCase("up")) {
+                startY = (int) (height * 0.7);
+                endY   = (int) (height * 0.3);
+            } else {
+                startY = (int) (height * 0.3);
+                endY   = (int) (height * 0.7);
+            }
         }
 
         PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, "finger");
         Sequence swipe = new Sequence(finger, 1);
 
-        swipe.addAction(finger.createPointerMove(Duration.ofMillis(0),
-                PointerInput.Origin.viewport(), x, startY));
+        swipe.addAction(finger.createPointerMove(Duration.ZERO,
+                PointerInput.Origin.viewport(), startX, startY));
 
         swipe.addAction(finger.createPointerDown(PointerInput.MouseButton.LEFT.asArg()));
 
-        swipe.addAction(finger.createPointerMove(Duration.ofMillis(500),
-                PointerInput.Origin.viewport(), x, endY));
+        swipe.addAction(new Pause(finger, Duration.ofMillis(200)));
+
+        swipe.addAction(finger.createPointerMove(Duration.ofMillis(800),
+                PointerInput.Origin.viewport(), startX, endY));
 
         swipe.addAction(finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
 
