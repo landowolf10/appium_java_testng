@@ -25,6 +25,7 @@ jobs:
       - name: Run tests inside container
         run: |
           docker run --rm \
+            -e TEST_SUITE=login_test \
             -e BROWSERSTACK_USERNAME=$BROWSERSTACK_USERNAME \
             -e BROWSERSTACK_ACCESS_KEY=$BROWSERSTACK_ACCESS_KEY \
             -e BROWSERSTACK_ANDROID_APP=$BROWSERSTACK_ANDROID_APP \
