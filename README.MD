@@ -132,7 +132,7 @@ src
 
 ---
 
-## ⚙️ Configuration Switching
+## Configuration Switching
 
 Execution environment is controlled via:
 
@@ -145,15 +145,10 @@ RUN_ON_BROWSERSTACK=true | false
 
 ---
 
-## 📦 Build Command
+## Build Command
 
 ```bash
 ./gradlew clean build
 ```
 
 ---
-
-## 👨‍💻 Author
-
-Orlando Avila  
-Automation Engineer | Mobile QA | Appium Specialist

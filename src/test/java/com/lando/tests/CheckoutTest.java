@@ -4,7 +4,7 @@ import org.testng.annotations.*;
 
 public class CheckoutTest extends BaseTest{
     @Test
-    public void checkoutFLow() {
+    public void checkoutFlow() {
         loginPage.login("standard_user", "secret_sauce");
         assertions.assertLoginSuccess();
 
