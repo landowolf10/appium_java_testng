@@ -25,7 +25,7 @@ jobs:
       - name: Run tests inside container
         run: |
           docker run --rm \
-            -e TEST_SUITE=login_test \
+            -e TEST_SUITE=testng-browserstack \
             -e RUN_ON_BROWSERSTACK=true \
             -e BROWSERSTACK_USERNAME=$BROWSERSTACK_USERNAME \
             -e BROWSERSTACK_ACCESS_KEY=$BROWSERSTACK_ACCESS_KEY \
