@@ -1,6 +1,7 @@
 package com.lando.tests;
 
 import io.appium.java_client.AppiumDriver;
+import org.lando.assertions.CustomAssertions;
 import org.lando.pages.*;
 import org.lando.utils.SetUp;
 import org.testng.annotations.*;
@@ -13,6 +14,7 @@ public class BaseTest {
     CheckoutPage checkoutPage;
     OverviewPage overviewPage;
     CompletePage completePage;
+    CustomAssertions assertions;
 
 
     @BeforeMethod
@@ -27,6 +29,8 @@ public class BaseTest {
         checkoutPage = new CheckoutPage(driver);
         overviewPage = new OverviewPage(driver);
         completePage = new CompletePage(driver);
+
+        assertions = new CustomAssertions(driver);
     }
 
     @AfterMethod(alwaysRun = true)

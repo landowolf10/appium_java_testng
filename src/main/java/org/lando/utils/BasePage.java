@@ -68,8 +68,8 @@ public class BasePage {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(locatorType));
     }
 
-    public void elementIsDisplayed(By locatorType, int maxWaitSec) {
-        getElementBy(locatorType, maxWaitSec).isDisplayed();
+    public boolean elementIsDisplayed(By locatorType, int maxWaitSec) {
+        return getElementBy(locatorType, maxWaitSec).isDisplayed();
     }
 
     public boolean elementExists(By elementLocator, int maxWaitSec) {
@@ -91,5 +91,9 @@ public class BasePage {
 
     public boolean elementIsEnabled(By locatorType, int maxWaitSec) {
         return getElementBy(locatorType, maxWaitSec).isEnabled();
+    }
+
+    public double extractPrice(String text) {
+        return Double.parseDouble(text.replaceAll("[^0-9.]", ""));
     }
 }
