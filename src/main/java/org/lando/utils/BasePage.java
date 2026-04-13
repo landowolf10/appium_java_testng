@@ -68,8 +68,8 @@ public class BasePage {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(locatorType));
     }
 
-    public boolean elementIsDisplayed(By locatorType, int maxWaitSec) {
-        return getElementBy(locatorType, maxWaitSec).isDisplayed();
+    public void elementIsDisplayed(By locatorType, int maxWaitSec) {
+        getElementBy(locatorType, maxWaitSec).isDisplayed();
     }
 
     public boolean elementExists(By elementLocator, int maxWaitSec) {
