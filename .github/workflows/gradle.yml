@@ -1,13 +1,12 @@
-name: Java CI with Gradle
+name: Run Tests from Docker Image (BrowserStack)
 
 on:
+  workflow_dispatch:
   push:
-    branches: [ "main" ]
-  pull_request:
     branches: [ "main" ]
 
 jobs:
-  build:
+  run-tests:
     runs-on: ubuntu-latest
 
     env:
@@ -15,43 +14,18 @@ jobs:
       BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
       BROWSERSTACK_ANDROID_APP: ${{ secrets.BROWSERSTACK_ANDROID_APP }}
 
-    permissions:
-      contents: read
+      DOCKERHUB_USERNAME: landowolf
+      IMAGE_NAME: appium-tests
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Pull Docker image
+        run: |
+          docker pull $DOCKERHUB_USERNAME/$IMAGE_NAME:latest
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-
-      - name: Grant execute permission to Gradle wrapper
-        run: chmod +x ./gradlew
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
-
-      - name: Debug length
-        run: echo ${#BROWSERSTACK_ANDROID_APP}
-
-      - name: Build with Gradle Wrapper (BrowserStack)
-        run: ./gradlew clean test -Plogin_test
-
-  dependency-submission:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-
-      - name: Generate and submit dependency graph
-        uses: gradle/actions/dependency-submission@v3
+      - name: Run tests inside container
+        run: |
+          docker run --rm \
+            -e BROWSERSTACK_USERNAME=$BROWSERSTACK_USERNAME \
+            -e BROWSERSTACK_ACCESS_KEY=$BROWSERSTACK_ACCESS_KEY \
+            -e BROWSERSTACK_ANDROID_APP=$BROWSERSTACK_ANDROID_APP \
+            $DOCKERHUB_USERNAME/$IMAGE_NAME:latest

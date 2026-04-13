@@ -1,31 +1,32 @@
-# Use a base image with Java
-FROM openjdk:17-jdk-slim-buster
+# Imagen base con Java 21
+FROM eclipse-temurin:21-jdk-jammy
 
-# Install necessary Linux packages
-RUN apt-get update && apt-get install -y curl p7zip p7zip-full unace zip unzip bzip2 wget
+# Instalar dependencias necesarias
+RUN apt-get update && apt-get install -y \
+    curl \
+    unzip \
+    wget \
+    && rm -rf /var/lib/apt/lists/*
 
-# Install Gradle
-RUN curl -sL https://services.gradle.org/distributions/gradle-8.0-bin.zip -o gradle.zip && \
-    unzip gradle.zip && \
-    mv gradle-8.0 /opt/gradle && \
-    rm gradle.zip && \
-    ln -s /opt/gradle/bin/gradle /usr/bin/gradle
+# Directorio de trabajo
+WORKDIR /app
 
-# Set up PATH to include /usr/local/bin
-#ENV PATH="/usr/local/bin:${PATH}"
+# Copiar solo archivos necesarios primero (mejor cache)
+COPY gradlew .
+COPY gradle gradle
+COPY build.gradle settings.gradle ./
 
-# Set up your working directory
-WORKDIR /usr/src/app
+# Dar permisos
+RUN chmod +x gradlew
 
-# Copy your project files
+# Descargar dependencias (cache layer)
+RUN ./gradlew dependencies || true
+
+# Copiar el resto del proyecto
 COPY . .
 
-# Set permissions
-RUN chmod +x gradlew
-#RUN chmod +x /usr/src/app/src/test/resources/drivers/geckodriver
+# Variable para suite
+ARG TEST_SUITE=login_test
 
-# Define a default value for the test runner
-ARG TEST_SUITE="login_test"
-
-# Run the test runner with gradlew
-CMD ["sh", "-c", "./gradlew clean test -P\"$TEST_SUITE\""]
+# Ejecutar tests
+CMD ["sh", "-c", "./gradlew clean test -P${TEST_SUITE}"]

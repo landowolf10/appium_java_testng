@@ -28,8 +28,6 @@ public class SetUp {
         String accessKey = System.getenv("BROWSERSTACK_ACCESS_KEY");
         String androidApp = System.getenv("BROWSERSTACK_ANDROID_APP");
 
-        System.out.println("ANDROID APP LENGTH = " + androidApp.length());
-
         DesiredCapabilities capabilities = new DesiredCapabilities();
 
         capabilities.setCapability("platformName", platformName);
