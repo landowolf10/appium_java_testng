@@ -10,28 +10,29 @@ import java.net.URL;
 import java.util.HashMap;
 
 public class SetUp {
-    AppiumDriver driver;
-    private static boolean driverInstanceExists = false;
-    private static AppiumDriver driverInstance = null;
+
+    private static ThreadLocal<AppiumDriver> driver = new ThreadLocal<>();
 
     public AppiumDriver getDriver(String deviceName, String platformName, String platformVersion) {
 
-        if (driverInstance == null) {
+        if (driver.get() == null) {
+
             boolean isRemote = Boolean.parseBoolean(
                     System.getenv().getOrDefault("RUN_ON_BROWSERSTACK", "false")
             );
 
             if (isRemote) {
-                driverInstance = createRemoteDriver(deviceName, platformName, platformVersion);
+                driver.set(createRemoteDriver(deviceName, platformName, platformVersion));
             } else {
-                driverInstance = createLocalDriver(platformName);
+                driver.set(createLocalDriver(platformName));
             }
         }
 
-        return driverInstance;
+        return driver.get();
     }
 
     private AppiumDriver createRemoteDriver(String deviceName, String platformName, String platformVersion) {
+
         String userName = System.getenv("BROWSERSTACK_USERNAME");
         String accessKey = System.getenv("BROWSERSTACK_ACCESS_KEY");
         String androidApp = System.getenv("BROWSERSTACK_ANDROID_APP");
@@ -52,7 +53,7 @@ public class SetUp {
         capabilities.setCapability("bstack:options", browserstackOptions);
 
         try {
-            driver = new AppiumDriver(
+            return new AppiumDriver(
                     new URL(String.format(
                             "https://%s:%s@hub.browserstack.com/wd/hub",
                             userName,
@@ -61,15 +62,15 @@ public class SetUp {
                     capabilities
             );
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-
-        return driver;
     }
 
     private AppiumDriver createLocalDriver(String platformName) {
+
         try {
             if (platformName.equals("Android")) {
+
                 UiAutomator2Options options = new UiAutomator2Options();
                 options.setDeviceName(ConstantData.deviceName);
                 options.setAppPackage(ConstantData.appPackage);
@@ -78,22 +79,21 @@ public class SetUp {
                 options.setCapability("appium:settings[waitForIdleTimeout]", 0);
                 options.setCapability("appium:uiautomator2ServerLaunchTimeout", 60000);
 
-                driver = new AndroidDriver(new URL("http://127.0.0.1:4723"), options);
+                return new AndroidDriver(new URL("http://127.0.0.1:4723"), options);
             }
-            else if (platformName.equals("iOS")) {
-                // iOS config
-            }
+
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
 
-        return driver;
+        throw new RuntimeException("Platform not supported: " + platformName);
     }
 
     public static void quitDriver() {
-        if (driverInstance != null) {
-            driverInstance.quit();
-            driverInstance = null;
+
+        if (driver.get() != null) {
+            driver.get().quit();
+            driver.remove();
         }
     }
 }
