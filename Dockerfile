@@ -18,6 +18,7 @@ RUN ./gradlew dependencies || true
 
 COPY . .
 
-ARG TEST_SUITE=login_test
+ENV TEST_SUITE=login_test
+ENV RUN_ON_BROWSERSTACK=true
 
-CMD ["sh", "-c", "./gradlew clean test -P${TEST_SUITE}"]
+CMD ["sh", "-c", "./gradlew clean test -P${TEST_SUITE} -PrunOnBrowserStack=${RUN_ON_BROWSERSTACK}"]

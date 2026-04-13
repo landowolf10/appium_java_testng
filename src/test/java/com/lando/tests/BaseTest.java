@@ -18,8 +18,11 @@ public class BaseTest {
     @BeforeTest
     @Parameters({"deviceName", "platformName", "platformVersion"})
     public void setUp(String deviceName, String platformName, String platformVersion) {
+        boolean runOnBrowserStack = Boolean.parseBoolean(
+                System.getProperty("runOnBrowserStack", "false")
+        );
         SetUp setUp = new SetUp();
-        driver = setUp.getDriver(deviceName, platformName, platformVersion, true);
+        driver = setUp.getDriver(deviceName, platformName, platformVersion, runOnBrowserStack);
 
         loginPage = new LoginPage(driver);
         productPage = new ProductPage(driver);
