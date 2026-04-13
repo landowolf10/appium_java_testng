@@ -15,20 +15,20 @@ public class SetUp {
     private static AppiumDriver driverInstance = null;
 
     public AppiumDriver getDriver(String deviceName, String platformName, String platformVersion) {
-        if (driver == null) {
+
+        if (driverInstance == null) {
             boolean isRemote = Boolean.parseBoolean(
                     System.getenv().getOrDefault("RUN_ON_BROWSERSTACK", "false")
             );
 
-            System.out.println("RUN_ON_BROWSERSTACK: " + isRemote);
-
-            if (isRemote)
-                driver = createRemoteDriver(deviceName, platformName, platformVersion);
-            else
-                driver = createLocalDriver(platformName);
+            if (isRemote) {
+                driverInstance = createRemoteDriver(deviceName, platformName, platformVersion);
+            } else {
+                driverInstance = createLocalDriver(platformName);
+            }
         }
 
-        return driver;
+        return driverInstance;
     }
 
     private AppiumDriver createRemoteDriver(String deviceName, String platformName, String platformVersion) {
@@ -91,14 +91,9 @@ public class SetUp {
     }
 
     public static void quitDriver() {
-        AppiumDriver currentDriver;
-
-        if (driverInstanceExists) {
-            currentDriver = driverInstance;
-            currentDriver.quit();
+        if (driverInstance != null) {
+            driverInstance.quit();
+            driverInstance = null;
         }
-
-        driverInstanceExists = false;
-        driverInstance = null;
     }
 }

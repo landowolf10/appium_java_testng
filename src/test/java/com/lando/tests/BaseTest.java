@@ -15,7 +15,7 @@ public class BaseTest {
     CompletePage completePage;
 
 
-    @BeforeTest
+    @BeforeMethod
     @Parameters({"deviceName", "platformName", "platformVersion"})
     public void setUp(String deviceName, String platformName, String platformVersion) {
         SetUp setUp = new SetUp();
@@ -29,7 +29,7 @@ public class BaseTest {
         completePage = new CompletePage(driver);
     }
 
-    @AfterTest
+    @AfterMethod(alwaysRun = true)
     public void tearDown() {
         SetUp.quitDriver();
     }

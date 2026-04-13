@@ -21,7 +21,8 @@ test {
         testLogging.showStandardStreams = true
         useDefaultListeners = true
         //parallel = true
-        if (project.hasProperty('login_test')) { suites './src/test/resources/test-suites/login_test.xml' }
+        if (project.hasProperty('testng-browserstack')) { suites './src/test/resources/test-suites/testng-browserstack.xml' }
+        if (project.hasProperty('testng-local')) { suites './src/test/resources/test-suites/testng-local.xml' }
         //if (project.hasProperty('suite2')) { suites './src/test/suite2.xml' }
     }
 }
