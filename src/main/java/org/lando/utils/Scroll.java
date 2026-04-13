@@ -18,50 +18,49 @@ public class Scroll extends BasePage{
 
     public void scrollUntilVisible(By elementLocator, String direction, int maxAttempts) {
         for (int i = 0; i < maxAttempts; i++) {
-            if (elementExists(elementLocator, 2)) return;
+
+            if (elementExists(elementLocator, 2)) {
+                return;
+            }
+
             scroll(direction);
         }
+
+        throw new RuntimeException("Element not found after scrolling: " + elementLocator);
     }
 
-    public void scroll(String direction)
-    {
-        if (platformName().toString().equalsIgnoreCase("ios"))
-        {
-            final HashMap<String, String> scrollObject = new HashMap<>();
-            scrollObject.put("direction", direction.toLowerCase());
-            driver.executeScript("mobile:swipe", scrollObject);
-
-            return;
-        }
-
+    public void scroll(String direction) {
         Dimension dim = driver.manage().window().getSize();
-        int x = dim.getWidth() / 2;
-        int start = dim.getHeight() / 2 + 490;
-        int end = dim.getHeight() / 2;
 
-        Point source;
-        Point target;
+        int width = dim.getWidth();
+        int height = dim.getHeight();
 
-        if(direction.equalsIgnoreCase("up"))
-        {
-            source = new Point(x, start);
-            target = new Point(x, end);
-        }
-        else
-        {
-            source = new Point(x, end);
-            target = new Point(x, start);
+        int x = width / 2;
+
+        int startY;
+        int endY;
+
+        if (direction.equalsIgnoreCase("up")) {
+            startY = (int) (height * 0.7);
+            endY = (int) (height * 0.3);
+        } else {
+            startY = (int) (height * 0.3);
+            endY = (int) (height * 0.7);
         }
 
         PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, "finger");
         Sequence swipe = new Sequence(finger, 1);
 
         swipe.addAction(finger.createPointerMove(Duration.ofMillis(0),
-                PointerInput.Origin.viewport(), source.x, source.y));
+                PointerInput.Origin.viewport(), x, startY));
+
         swipe.addAction(finger.createPointerDown(PointerInput.MouseButton.LEFT.asArg()));
-        swipe.addAction(finger.createPointerMove(Duration.ofMillis(700),
-                PointerInput.Origin.viewport(),target.x, target.y));
+
+        swipe.addAction(finger.createPointerMove(Duration.ofMillis(500),
+                PointerInput.Origin.viewport(), x, endY));
+
         swipe.addAction(finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
+
         driver.perform(List.of(swipe));
     }
 }

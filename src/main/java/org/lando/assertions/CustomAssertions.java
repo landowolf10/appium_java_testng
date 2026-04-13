@@ -41,26 +41,20 @@ public class CustomAssertions extends BasePage {
     }
 
     public void assertOverviewTotals() {
+
         elementIsDisplayed(
                 AppiumBy.accessibilityId(OverviewLocators.overviewContainer),
                 10
         );
 
         scroll.scrollUntilVisible(
-                AppiumBy.androidUIAutomator("new UiSelector().textContains(\"Item total\")"),
-                "down",
-                5
-        );
-
-        scroll.scrollUntilVisible(
-                AppiumBy.androidUIAutomator("new UiSelector().textContains(\"Tax\")"),
-                "down",
-                5
-        );
-
-        scroll.scrollUntilVisible(
                 AppiumBy.androidUIAutomator("new UiSelector().textContains(\"Total\")"),
-                "down",
+                "up",
+                7
+        );
+
+        waitUntilElementLocated(
+                AppiumBy.androidUIAutomator("new UiSelector().textContains(\"Total\")"),
                 5
         );
 
@@ -89,7 +83,6 @@ public class CustomAssertions extends BasePage {
         double tax = extractPrice(taxText);
         double total = extractPrice(totalText);
 
-        // 🔥 FIX FLOAT PRECISION
         assertEquals(
                 total,
                 subtotal + tax,
