@@ -41,22 +41,15 @@ public class CustomAssertions extends BasePage {
     }
 
     public void assertOverviewTotals() {
-
         elementIsDisplayed(
                 AppiumBy.accessibilityId(OverviewLocators.overviewContainer),
                 10
         );
 
-        scroll.scrollUntilVisible(
-                AppiumBy.androidUIAutomator("new UiSelector().textContains(\"Total\")"),
-                "up",
-                7
-        );
-
-        waitUntilElementLocated(
-                AppiumBy.androidUIAutomator("new UiSelector().textContains(\"Total\")"),
-                5
-        );
+        driver.findElement(AppiumBy.androidUIAutomator(
+                "new UiScrollable(new UiSelector().scrollable(true))" +
+                        ".scrollIntoView(new UiSelector().textContains(\"Total\"))"
+        ));
 
         List<WebElement> prices =
                 driver.findElements(AppiumBy.className("android.widget.TextView"));
