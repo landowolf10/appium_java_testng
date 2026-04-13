@@ -6,6 +6,7 @@ import org.lando.locators.CompleteCheckoutLocators;
 import org.lando.locators.OverviewLocators;
 import org.lando.locators.ProductLocators;
 import org.lando.utils.BasePage;
+import org.lando.utils.Scroll;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
@@ -13,8 +14,11 @@ import java.util.List;
 import static org.testng.Assert.*;
 
 public class CustomAssertions extends BasePage {
+    private final Scroll scroll;
+
     public CustomAssertions(AppiumDriver driver) {
         super(driver);
+        this.scroll = new Scroll(driver);
     }
 
     public void assertLoginSuccess() {
@@ -37,7 +41,28 @@ public class CustomAssertions extends BasePage {
     }
 
     public void assertOverviewTotals() {
-        elementIsDisplayed(AppiumBy.accessibilityId(OverviewLocators.overviewContainer), 10);
+        elementIsDisplayed(
+                AppiumBy.accessibilityId(OverviewLocators.overviewContainer),
+                10
+        );
+
+        scroll.scrollUntilVisible(
+                AppiumBy.androidUIAutomator("new UiSelector().textContains(\"Item total\")"),
+                "down",
+                5
+        );
+
+        scroll.scrollUntilVisible(
+                AppiumBy.androidUIAutomator("new UiSelector().textContains(\"Tax\")"),
+                "down",
+                5
+        );
+
+        scroll.scrollUntilVisible(
+                AppiumBy.androidUIAutomator("new UiSelector().textContains(\"Total\")"),
+                "down",
+                5
+        );
 
         List<WebElement> prices =
                 driver.findElements(AppiumBy.className("android.widget.TextView"));
@@ -64,6 +89,7 @@ public class CustomAssertions extends BasePage {
         double tax = extractPrice(taxText);
         double total = extractPrice(totalText);
 
+        // 🔥 FIX FLOAT PRECISION
         assertEquals(
                 total,
                 subtotal + tax,
