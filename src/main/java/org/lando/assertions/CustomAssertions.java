@@ -3,6 +3,7 @@ package org.lando.assertions;
 import io.appium.java_client.AppiumBy;
 import io.appium.java_client.AppiumDriver;
 import org.lando.locators.CompleteCheckoutLocators;
+import org.lando.locators.OverviewLocators;
 import org.lando.locators.ProductLocators;
 import org.lando.utils.BasePage;
 import org.openqa.selenium.WebElement;
@@ -36,32 +37,39 @@ public class CustomAssertions extends BasePage {
     }
 
     public void assertOverviewTotals() {
+        elementIsDisplayed(AppiumBy.accessibilityId(OverviewLocators.overviewContainer), 10);
 
-        String subtotalText = getElementText(
-                AppiumBy.androidUIAutomator("new UiSelector().textContains(\"Item total:\")"),
-                5
-        );
+        List<WebElement> prices =
+                driver.findElements(AppiumBy.className("android.widget.TextView"));
 
-        String taxText = getElementText(
-                AppiumBy.androidUIAutomator("new UiSelector().textContains(\"Tax:\")"),
-                5
-        );
-
-        List<WebElement> labels = driver.findElements(
-                AppiumBy.className("android.widget.TextView")
-        );
-
-        String totalText = labels.stream()
+        String subtotalText = prices.stream()
                 .map(WebElement::getText)
-                .filter(t -> t.startsWith("Total:") && !t.startsWith("Item"))
+                .filter(t -> t.contains("Item total"))
                 .findFirst()
-                .orElseThrow();
+                .orElseThrow(() -> new AssertionError("Subtotal not found"));
+
+        String taxText = prices.stream()
+                .map(WebElement::getText)
+                .filter(t -> t.contains("Tax"))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("Tax not found"));
+
+        String totalText = prices.stream()
+                .map(WebElement::getText)
+                .filter(t -> t.startsWith("Total"))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("Total not found"));
 
         double subtotal = extractPrice(subtotalText);
         double tax = extractPrice(taxText);
         double total = extractPrice(totalText);
 
-        assertEquals(total, subtotal + tax, 0.01, "Total calculation is incorrect");
+        assertEquals(
+                total,
+                subtotal + tax,
+                0.01,
+                "Total calculation is incorrect"
+        );
     }
 
     public void assertOrderComplete() {
