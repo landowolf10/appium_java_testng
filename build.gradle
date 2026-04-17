@@ -30,13 +30,12 @@ test {
 }
 
 tasks.withType(Test) {
+    systemProperty "allure.results.directory", "allure-results"
+    systemProperties = System.properties as Map<String, ?>
+
     testLogging {
         exceptionFormat "full"
         events "started", "skipped", "passed", "failed"
         showStandardStreams true
     }
-}
-
-tasks.withType(Test) {
-    systemProperties = System.properties as Map<String, ?>
 }
