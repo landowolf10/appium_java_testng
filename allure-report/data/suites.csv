@@ -1,2 +1,0 @@
-"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
-"","8912","checkoutFlow","Local Suite","Mon Apr 13 13:27:19 CST 2026","passed","Mon Apr 13 13:27:27 CST 2026","com.lando.tests.CheckoutTest","Local Test","com.lando.tests.CheckoutTest","checkoutFlow"
