@@ -1,4 +1,4 @@
-name: Run Tests from Docker Image (BrowserStack)
+name: Run Tests + Allure Report
 
 on:
   workflow_dispatch:
@@ -18,16 +18,42 @@ jobs:
       IMAGE_NAME: appium-tests
 
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Create allure-results folder
+        run: mkdir -p allure-results
+
       - name: Pull Docker image
-        run: |
-          docker pull $DOCKERHUB_USERNAME/$IMAGE_NAME:latest
+        run: docker pull $DOCKERHUB_USERNAME/$IMAGE_NAME:latest
 
       - name: Run tests inside container
         run: |
           docker run --rm \
+            -v ${{ github.workspace }}/allure-results:/app/allure-results \
             -e TEST_SUITE=testng-browserstack \
             -e RUN_ON_BROWSERSTACK=true \
             -e BROWSERSTACK_USERNAME=$BROWSERSTACK_USERNAME \
             -e BROWSERSTACK_ACCESS_KEY=$BROWSERSTACK_ACCESS_KEY \
             -e BROWSERSTACK_ANDROID_APP=$BROWSERSTACK_ANDROID_APP \
             $DOCKERHUB_USERNAME/$IMAGE_NAME:latest
+
+      - name: Install Allure
+        run: |
+          npm install -g allure-commandline --save-dev
+
+      - name: Generate Allure Report
+        run: |
+          allure generate allure-results --clean -o allure-report
+
+      - name: Upload report artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report
+          path: allure-report
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./allure-report

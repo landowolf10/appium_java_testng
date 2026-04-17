@@ -7,7 +7,6 @@ import org.lando.locators.OverviewLocators;
 import org.lando.locators.ProductLocators;
 import org.lando.utils.BasePage;
 import org.lando.utils.Scroll;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
@@ -42,23 +41,42 @@ public class CustomAssertions extends BasePage {
     }
 
     public void assertOverviewTotals() {
-        elementIsDisplayed(
-                AppiumBy.accessibilityId(OverviewLocators.overviewContainer),
-                10
+        scroll.scrollUntilVisible(
+                AppiumBy.accessibilityId(OverviewLocators.finishButton), "up", 5
         );
 
-        String subtotalText = getElementText(
-                AppiumBy.androidUIAutomator("new UiSelector().textContains(\"Item total\")"),
-                5
-        );
+        List<WebElement> prices =
+                driver.findElements(AppiumBy.className("android.widget.TextView"));
 
-        assertNotNull(subtotalText, "Subtotal not found");
+        String subtotalText = prices.stream()
+                .map(WebElement::getText)
+                .filter(t -> t.contains("Item total"))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("Subtotal not found"));
+
+        String taxText = prices.stream()
+                .map(WebElement::getText)
+                .filter(t -> t.contains("Tax"))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("Tax not found"));
+
+        String totalText = prices.stream()
+                .map(WebElement::getText)
+                .filter(t -> t.startsWith("Total"))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("Total not found"));
 
         double subtotal = extractPrice(subtotalText);
+        double tax = extractPrice(taxText);
+        double total = extractPrice(totalText);
 
-        assertTrue(subtotal > 0, "Subtotal should be greater than 0");
+        assertEquals(
+                total,
+                subtotal + tax,
+                0.01,
+                "Total calculation is incorrect"
+        );
     }
-
     public void assertOrderComplete() {
         assertTrue(
                 elementIsDisplayed(AppiumBy.accessibilityId(CompleteCheckoutLocators.completeCheckoutView), 10),
@@ -68,7 +86,7 @@ public class CustomAssertions extends BasePage {
 
     public void assertBackHomeButton() {
         assertTrue(
-                elementIsDisplayed(AppiumBy.accessibilityId("test-BACK HOME"), 10),
+                elementIsDisplayed(AppiumBy.accessibilityId(CompleteCheckoutLocators.backToHomeButton), 10),
                 "Back Home button not visible"
         );
     }

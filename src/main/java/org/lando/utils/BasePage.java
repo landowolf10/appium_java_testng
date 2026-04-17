@@ -17,9 +17,9 @@ public class BasePage {
         this.driver = driver;
     }
 
-    public AppiumDriver getDriver() {
+    /*public AppiumDriver getDriver() {
         return driver;
-    }
+    }*/
 
     private WebElement getElementBy(By elementLocator, int maxWaitSec)
     {

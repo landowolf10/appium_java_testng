@@ -1,11 +1,17 @@
 package com.lando.tests;
 
 import io.appium.java_client.AppiumDriver;
+import io.qameta.allure.Attachment;
+import io.qameta.allure.testng.AllureTestNg;
 import org.lando.assertions.CustomAssertions;
 import org.lando.pages.*;
 import org.lando.utils.SetUp;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import org.testng.ITestResult;
 import org.testng.annotations.*;
 
+@Listeners({AllureTestNg.class})
 public class BaseTest {
     AppiumDriver driver;
     LoginPage loginPage;
@@ -34,7 +40,17 @@ public class BaseTest {
     }
 
     @AfterMethod(alwaysRun = true)
-    public void tearDown() {
+    public void tearDown(ITestResult result) {
+
+        if (ITestResult.FAILURE == result.getStatus()) {
+            attachScreenshot();
+        }
+
         SetUp.quitDriver();
+    }
+
+    @Attachment(value = "Screenshot on failure", type = "image/png")
+    public byte[] attachScreenshot() {
+        return ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
     }
 }

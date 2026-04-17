@@ -1,9 +1,14 @@
 package com.lando.tests;
 
+import io.qameta.allure.*;
 import org.testng.annotations.*;
 
+@Epic("Checkout")
+@Feature("E2E Purchase")
 public class CheckoutTest extends BaseTest{
     @Test
+    @Story("Complete checkout flow")
+    @Severity(SeverityLevel.CRITICAL)
     public void checkoutFlow() {
         loginPage.login("standard_user", "secret_sauce");
         assertions.assertLoginSuccess();
