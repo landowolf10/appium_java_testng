@@ -10,11 +10,9 @@ import java.net.URL;
 import java.util.HashMap;
 
 public class SetUp {
-
     private static ThreadLocal<AppiumDriver> driver = new ThreadLocal<>();
 
     public AppiumDriver getDriver(String deviceName, String platformName, String platformVersion) {
-
         if (driver.get() == null) {
 
             boolean isRemote = Boolean.parseBoolean(

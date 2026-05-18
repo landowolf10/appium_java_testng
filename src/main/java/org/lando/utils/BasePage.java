@@ -17,12 +17,7 @@ public class BasePage {
         this.driver = driver;
     }
 
-    /*public AppiumDriver getDriver() {
-        return driver;
-    }*/
-
-    private WebElement getElementBy(By elementLocator, int maxWaitSec)
-    {
+    private WebElement getElementBy(By elementLocator, int maxWaitSec) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(maxWaitSec));
 
         return wait.until(ExpectedConditions.visibilityOfElementLocated(elementLocator));
