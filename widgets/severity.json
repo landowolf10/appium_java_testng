@@ -1,1 +1,1 @@
-[]
+[{"uid":"6dd55c5968e53dc1","name":"checkoutFlow","time":{"start":1779086876625,"stop":1779086906030,"duration":29405},"status":"passed","severity":"critical"},{"uid":"b480646ccb6f8842","name":"checkoutFlow","time":{"start":1779086872937,"stop":1779086900620,"duration":27683},"status":"passed","severity":"critical"}]
