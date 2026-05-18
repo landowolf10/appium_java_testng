@@ -5,7 +5,7 @@ import org.testng.annotations.*;
 
 @Epic("Checkout")
 @Feature("E2E Purchase")
-public class CheckoutTest extends BaseTest{
+public class CheckoutTest extends BaseTest {
     @Test
     @Story("Complete checkout flow")
     @Severity(SeverityLevel.CRITICAL)
