@@ -16,6 +16,7 @@ dependencies {
     implementation group: 'io.appium', name: 'java-client', version: '9.3.0'
     implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
     testImplementation 'io.qameta.allure:allure-testng:2.24.0'
+    implementation 'com.google.code.gson:gson:2.11.0'
 }
 
 test {

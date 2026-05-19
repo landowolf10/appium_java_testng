@@ -6,7 +6,6 @@ import org.lando.utils.BasePage;
 import io.appium.java_client.AppiumBy;
 
 public class LoginPage extends BasePage {
-
     public LoginPage(AppiumDriver driver) {
         super(driver);
     }

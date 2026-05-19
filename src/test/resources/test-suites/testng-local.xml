@@ -4,6 +4,7 @@
         <parameter name="platformName" value="Android"/>
         <parameter name="platformVersion" value="11.0"/>
         <classes>
+            <class name="com.lando.tests.LoginTest"/>
             <class name="com.lando.tests.CheckoutTest"/>
         </classes>
     </test>

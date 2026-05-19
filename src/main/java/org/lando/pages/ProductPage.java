@@ -4,9 +4,6 @@ import io.appium.java_client.AppiumBy;
 import io.appium.java_client.AppiumDriver;
 import org.lando.locators.ProductLocators;
 import org.lando.utils.BasePage;
-import org.lando.utils.Scroll;
-import org.openqa.selenium.By;
-import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;

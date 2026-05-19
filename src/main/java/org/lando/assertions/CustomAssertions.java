@@ -3,10 +3,12 @@ package org.lando.assertions;
 import io.appium.java_client.AppiumBy;
 import io.appium.java_client.AppiumDriver;
 import org.lando.locators.CompleteCheckoutLocators;
+import org.lando.locators.LoginLocators;
 import org.lando.locators.OverviewLocators;
 import org.lando.locators.ProductLocators;
 import org.lando.utils.BasePage;
 import org.lando.utils.Scroll;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
@@ -26,6 +28,15 @@ public class CustomAssertions extends BasePage {
                 elementIsDisplayed(AppiumBy.accessibilityId(ProductLocators.productsContainer), 10),
                 "Login was not successful - Products screen not visible"
         );
+    }
+
+    public void assertLoginErrorMessage(String expectedMessage) {
+        By errorContainerLocator = AppiumBy.xpath(LoginLocators.errorMessage);
+
+        assertTrue(elementIsDisplayed(errorContainerLocator, 5), "Error container not visible");
+
+        String actualMessage = getElementText(errorContainerLocator, 5);
+        assertEquals(actualMessage, expectedMessage, "Error message doesn't match.");
     }
 
     public void assertProductsLoaded() {
