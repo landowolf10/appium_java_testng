@@ -17,10 +17,10 @@ public class BasePage {
         this.driver = driver;
     }
 
-    private WebElement getElementBy(By elementLocator, int maxWaitSec) {
+    public  WebElement getElementBy(By elementLocator, int maxWaitSec) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(maxWaitSec));
 
-        return wait.until(ExpectedConditions.visibilityOfElementLocated(elementLocator));
+        return wait.until(ExpectedConditions.presenceOfElementLocated(elementLocator));
     }
 
     public List<WebElement> getAllElementsBy(By elementLocator, int maxWaitSec) {
@@ -32,8 +32,9 @@ public class BasePage {
         }
     }
     public void writeText(By elementLocator, String text, int maxWaitSec) {
-        getElementBy(elementLocator, maxWaitSec).clear();
-        getElementBy(elementLocator, maxWaitSec).sendKeys(text);
+        WebElement element = getElementBy(elementLocator, maxWaitSec);
+        element.clear();
+        element.sendKeys(text);
     }
 
     public void clickElement(By elementLocator, int maxWaitSec) {

@@ -10,7 +10,7 @@ public class CompletePage extends BasePage {
         super(driver);
     }
 
-    public void assertOrderComplete() {
-        elementIsDisplayed(AppiumBy.accessibilityId(CompleteCheckoutLocators.completeCheckoutView), 10);
+    public void clickBackToHomeButton() {
+        clickElement(AppiumBy.accessibilityId(CompleteCheckoutLocators.backToHomeButton), 10);
     }
 }

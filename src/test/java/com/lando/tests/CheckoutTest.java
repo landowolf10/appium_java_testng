@@ -3,6 +3,9 @@ package com.lando.tests;
 import io.qameta.allure.*;
 import org.testng.annotations.*;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Epic("Checkout")
 @Feature("E2E Purchase")
 public class CheckoutTest extends BaseTest {
@@ -10,12 +13,13 @@ public class CheckoutTest extends BaseTest {
     @Story("Complete checkout flow")
     @Severity(SeverityLevel.CRITICAL)
     public void checkoutFlow() {
+        List<String> productsToBuy = Arrays.asList("Sauce Labs Backpack", "Sauce Labs Fleece Jacket");
+
         loginPage.login("standard_user", "secret_sauce");
         assertions.assertLoginSuccess();
-
-        productPage.addRandomProductToCart();
         assertions.assertProductsLoaded();
 
+        productPage.addRandomProductToCart();
         productPage.gotToCart();
         assertions.assertCartNotEmpty();
 
@@ -27,8 +31,8 @@ public class CheckoutTest extends BaseTest {
 
         overviewPage.finishCheckout();
 
-        completePage.assertOrderComplete();
         assertions.assertOrderComplete();
         assertions.assertBackHomeButton();
+        completePage.clickBackToHomeButton();
     }
 }

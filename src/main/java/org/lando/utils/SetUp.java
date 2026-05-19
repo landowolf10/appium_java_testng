@@ -10,7 +10,7 @@ import java.net.URL;
 import java.util.HashMap;
 
 public class SetUp {
-    private static ThreadLocal<AppiumDriver> driver = new ThreadLocal<>();
+    private static final ThreadLocal<AppiumDriver> driver = new ThreadLocal<>();
 
     public AppiumDriver getDriver(String deviceName, String platformName, String platformVersion) {
         if (driver.get() == null) {
@@ -30,7 +30,6 @@ public class SetUp {
     }
 
     private AppiumDriver createRemoteDriver(String deviceName, String platformName, String platformVersion) {
-
         String userName = System.getenv("BROWSERSTACK_USERNAME");
         String accessKey = System.getenv("BROWSERSTACK_ACCESS_KEY");
         String androidApp = System.getenv("BROWSERSTACK_ANDROID_APP");
@@ -65,10 +64,8 @@ public class SetUp {
     }
 
     private AppiumDriver createLocalDriver(String platformName) {
-
         try {
             if (platformName.equals("Android")) {
-
                 UiAutomator2Options options = new UiAutomator2Options();
                 options.setDeviceName(ConstantData.deviceName);
                 options.setAppPackage(ConstantData.appPackage);
@@ -88,7 +85,6 @@ public class SetUp {
     }
 
     public static void quitDriver() {
-
         if (driver.get() != null) {
             driver.get().quit();
             driver.remove();
