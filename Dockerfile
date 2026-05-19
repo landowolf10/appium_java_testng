@@ -18,6 +18,6 @@ RUN ./gradlew dependencies || true
 
 COPY . .
 
-ENV TEST_SUITE=login_test
+ENV TEST_SUITE=testng-browserstack
 
 CMD ["sh", "-c", "./gradlew clean test -P${TEST_SUITE}"]
