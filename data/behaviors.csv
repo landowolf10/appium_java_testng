@@ -1,2 +1,4 @@
 "BROKEN","EPIC","FAILED","FEATURE","PASSED","SKIPPED","STORY","UNKNOWN"
+"0","Login","0","Login feature","2","0","Login flow with invalid credentials","0"
+"0","Login","0","Login feature","2","0","Complete login flow","0"
 "0","Checkout","0","E2E Purchase","2","0","Complete checkout flow","0"
